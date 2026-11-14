@@ -1,0 +1,23 @@
+name: Hub bot
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  process:
+    # Check a new Join / Flag issue, reply, and record the result with labels.
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Process issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUEST_ANSWERS: ${{ secrets.QUEST_ANSWERS }}
+          GUILD_ROSTER: ${{ secrets.GUILD_ROSTER }}
+        run: python3 .github/scripts/guild.py process
